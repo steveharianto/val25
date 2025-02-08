@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 2s ease-in;
+        }
+
+        .pop-in {
+            opacity: 0;
+            animation: popIn 1s ease-out forwards;
+        }
+
+        .delay-1 { animation-delay: 0.5s; }
+        .delay-2 { animation-delay: 1s; }
+        .delay-3 { animation-delay: 1.5s; }
+        .delay-4 { animation-delay: 2s; }
+
+        @keyframes clickPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.95); }
+            100% { transform: scale(1); }
+        }
+
+        .click-animation {
+            animation: clickPop 0.5s ease-in-out;
+        }
+
+        .transition-all {
+            transition-duration: 800ms;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+    <script>
+        function handleNoClick(btn) {
+            // If button is already transformed, handle like "Yes" click
+            if (btn.classList.contains('bg-pink-400')) {
+                btn.classList.add('click-animation');
+                setTimeout(() => {
+                    // Reset button state before redirecting
+                    btn.classList.remove('bg-pink-400', 'text-white', 'hover:bg-pink-500');
+                    const textSpan = btn.querySelector('span');
+                    textSpan.textContent = 'No';
+                    window.location.href = 'third.html';
+                }, 600);
+                return;
+            }
+
+            const textSpan = btn.querySelector('span');
+            
+            // First change color smoothly
+            btn.classList.add('bg-pink-400', 'text-white');
+            btn.classList.add('hover:bg-pink-500');
+            
+            // Wait for color transition
+            setTimeout(() => {
+                // Change text with fade effect
+                textSpan.style.opacity = '0';
+                setTimeout(() => {
+                    textSpan.textContent = 'Yes';
+                    textSpan.style.opacity = '1';
+                }, 400);
+            }, 800);
+        }
+    </script>
+</head>
+<body class="min-h-screen bg-blue-50">
+    <div class="flex flex-col justify-center items-center min-h-screen p-8 gap-8">
+        <img src="mocha2.gif" class="w-24 pop-in delay-1" alt="Mocha">
+        
+        <h1 class="text-3xl font-serif text-blue-800/70 text-center pop-in">
+            Will you be my valentine?
+        </h1>
+
+        <div class="flex gap-4 pop-in delay-4">
+            <button onclick="window.location.href='third.html'" class="bg-pink-400 hover:bg-pink-500 text-white px-8 py-3 rounded-full font-semibold shadow-lg transition-all hover:scale-110">
+                Yes
+            </button>
+            <button onclick="handleNoClick(this)" class="group bg-gray-100 hover:bg-gray-200 text-gray-700 px-8 py-3 rounded-full font-semibold shadow-lg transition-all hover:scale-110 relative">
+                <span class="transition-opacity duration-400">No</span>
+                <img src="mochamad.gif" class="absolute w-12 h-12 -top-14 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity" alt="Mocha">
+            </button>
+        </div>
+
+        <img src="mocha1.gif" class="w-24 pop-in delay-2 fixed bottom-8 right-8" alt="Mocha">
+    </div>
+</body>
+</html>

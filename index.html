@@ -23,10 +23,21 @@
             to { width: 100%; }
         }
 
+        @keyframes spike {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-50px) scale(1.1); }
+            100% { transform: translateY(0); }
+        }
+
         .floating-letter {
             animation: float 3s ease-in-out infinite;
+            cursor: pointer;
         }
         
+        .spike {
+            animation: spike 0.5s ease-in-out;
+        }
+
         .typewriter {
             overflow: hidden;
             white-space: nowrap;
@@ -34,6 +45,18 @@
             animation: typewriter 1s steps(20) 1;
         }
     </style>
+    <script>
+        function handleClick(img) {
+            img.classList.remove('floating-letter');
+            img.classList.add('spike');
+            setTimeout(() => {
+                img.src = 'letter_open.png';
+                setTimeout(() => {
+                    window.location.href = 'second.html';
+                }, 500);
+            }, 250);
+        }
+    </script>
 </head>
 <body class="min-h-screen bg-blue-50">
     <div class="flex flex-col justify-center items-center min-h-screen p-4 gap-8">
@@ -44,6 +67,7 @@
             src="letter_closed.png" 
             alt="Floating Letter" 
             class="floating-letter w-32 h-auto"
+            onclick="handleClick(this)"
         >
     </div>
 </body>
