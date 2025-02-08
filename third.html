@@ -34,7 +34,7 @@
 
         .scroll-trigger {
             opacity: 0;
-            margin-top: 25vh;
+            margin-top: 50vh;
         }
 
         .scroll-trigger:first-child {
@@ -43,6 +43,25 @@
 
         .scroll-trigger.visible {
             animation: fadeInUp 1s ease-out forwards;
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        .fade-out {
+            animation: fadeOut 1s ease-out forwards;
+        }
+
+        @keyframes spike {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-50px) scale(1.1); }
+            100% { transform: translateY(0); }
+        }
+
+        .spike {
+            animation: spike 0.5s ease-in-out;
         }
     </style>
     <script>
@@ -90,19 +109,35 @@
             window.addEventListener('scroll', handleScroll);
             handleScroll(); // Initial check
         });
+
+        function handlePlanClick(img) {
+            img.classList.remove('floating');
+            img.classList.add('spike');
+            
+            setTimeout(() => {
+                // Fade out all content
+                document.querySelector('.flex.flex-col').classList.add('fade-out');
+                
+                // Redirect after fade
+                setTimeout(() => {
+                    window.location.href = 'schedule.html';
+                }, 1000);
+            }, 500);
+        }
     </script>
 </head>
 <body class="min-h-screen bg-blue-50">
     <div class="flex flex-col items-center p-8">
-        <div class="scroll-trigger text-center mt-32">
+        <div class="scroll-trigger text-center mt-48">
             <h1 class="text-3xl font-serif text-blue-800/70">
                 thank you for saying yes :>
             </h1>
+            <img src="milklove.gif" alt="Milk Love" class="w-32 mx-auto mt-4">
         </div>
 
         <div class="scroll-trigger text-center">
             <p class="text-xl text-blue-800/70">as you know</p>
-            <img src="milllkcheer.gif" alt="Milk Cheer" class="w-32 mx-auto mt-4">
+            <img src="milkcheer.gif" alt="Milk Cheer" class="w-32 mx-auto mt-4">
         </div>
 
         <div class="scroll-trigger text-center">
@@ -114,6 +149,7 @@
 
         <div class="scroll-trigger text-center">
             <p class="text-xl text-blue-800/70">but i have an idea</p>
+            <img src="milk.gif" alt="Milk" class="w-32 mx-auto mt-4">
         </div>
 
         <div class="scroll-trigger text-center">
@@ -127,7 +163,7 @@
 
         <div class="scroll-trigger flex justify-center gap-8 mb-32">
             <div class="text-center">
-                <img src="dateplan.png" alt="Date Plan" class="w-32 floating cursor-pointer">
+                <img src="dateplan.png" alt="Date Plan" class="w-32 floating cursor-pointer" onclick="handlePlanClick(this)">
                 <p class="mt-4 text-blue-800/70">Date Plan</p>
             </div>
             <div class="text-center opacity-50">
