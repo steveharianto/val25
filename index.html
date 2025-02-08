@@ -29,8 +29,13 @@
             100% { transform: translateY(0); }
         }
 
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
         .floating-letter {
-            animation: float 3s ease-in-out infinite;
+            animation: float 1.5s ease-in-out infinite;
             cursor: pointer;
         }
         
@@ -42,7 +47,11 @@
             overflow: hidden;
             white-space: nowrap;
             margin: 0 auto;
-            animation: typewriter 1s steps(20) 1;
+            animation: typewriter 1.5s steps(20) 1;
+        }
+
+        .fade-out {
+            animation: fadeOut 1s ease-out forwards;
         }
     </style>
     <script>
@@ -52,7 +61,10 @@
             setTimeout(() => {
                 img.src = 'letter_open.png';
                 setTimeout(() => {
-                    window.location.href = 'second.html';
+                    document.querySelector('.flex.flex-col').classList.add('fade-out');
+                    setTimeout(() => {
+                        window.location.href = 'second.html';
+                    }, 1000);
                 }, 500);
             }, 250);
         }

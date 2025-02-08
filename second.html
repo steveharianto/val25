@@ -27,9 +27,9 @@
         }
 
         .delay-1 { animation-delay: 0.5s; }
-        .delay-2 { animation-delay: 1s; }
-        .delay-3 { animation-delay: 1.5s; }
-        .delay-4 { animation-delay: 2s; }
+        .delay-2 { animation-delay: 2s; }
+        .delay-3 { animation-delay: 2.5s; }
+        .delay-4 { animation-delay: 3s; }
 
         @keyframes clickPop {
             0% { transform: scale(1); }
@@ -45,19 +45,99 @@
             transition-duration: 800ms;
             transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
         }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .falling {
+            position: fixed;
+            animation: fall 3s linear;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        .heart {
+            color: #fb7185;
+            font-size: 24px;
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        .fade-out {
+            animation: fadeOut 1s ease-out forwards;
+        }
+
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        .typewriter {
+            overflow: hidden;
+            white-space: nowrap;
+            margin: 0 auto;
+            animation: typewriter 1.5s steps(20) 1;
+        }
     </style>
     <script>
+        function createFallingElement(content, isImage = false) {
+            const elem = document.createElement(isImage ? 'img' : 'div');
+            if (isImage) {
+                elem.src = content;
+                elem.style.width = '40px';
+            } else {
+                elem.innerHTML = content;
+                elem.className = 'heart';
+            }
+            elem.classList.add('falling');
+            elem.style.left = Math.random() * 100 + 'vw';
+            elem.style.animationDuration = (Math.random() * 2 + 2) + 's';
+            document.body.appendChild(elem);
+            setTimeout(() => elem.remove(), 3000);
+        }
+
+        function startFallingAnimation() {
+            const images = ['mochalove.gif', 'mochalove2.gif', 'mochalove3.gif'];
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    createFallingElement('❤');
+                    if (i % 5 === 0) {
+                        createFallingElement(images[Math.floor(Math.random() * images.length)], true);
+                    }
+                }, i * 100);
+            }
+        }
+
         function handleNoClick(btn) {
-            // If button is already transformed, handle like "Yes" click
             if (btn.classList.contains('bg-pink-400')) {
                 btn.classList.add('click-animation');
+                startFallingAnimation();
+                
+                // Fade out all elements after hearts animation
                 setTimeout(() => {
-                    // Reset button state before redirecting
-                    btn.classList.remove('bg-pink-400', 'text-white', 'hover:bg-pink-500');
-                    const textSpan = btn.querySelector('span');
-                    textSpan.textContent = 'No';
-                    window.location.href = 'third.html';
-                }, 600);
+                    document.querySelector('.flex.flex-col').classList.add('fade-out');
+                    // Fade out all falling elements
+                    document.querySelectorAll('.falling').forEach(elem => {
+                        elem.classList.add('fade-out');
+                    });
+                    setTimeout(() => {
+                        btn.classList.remove('bg-pink-400', 'text-white', 'hover:bg-pink-500');
+                        const textSpan = btn.querySelector('span');
+                        if (textSpan) textSpan.textContent = 'No';
+                        window.location.href = 'third.html';
+                    }, 1000);
+                }, 2000);
                 return;
             }
 
@@ -83,12 +163,14 @@
     <div class="flex flex-col justify-center items-center min-h-screen p-8 gap-8">
         <img src="mocha2.gif" class="w-24 pop-in delay-1" alt="Mocha">
         
-        <h1 class="text-3xl font-serif text-blue-800/70 text-center pop-in">
-            Will you be my valentine?
-        </h1>
+        <div class="w-fit">
+            <h1 class="typewriter text-3xl font-serif text-blue-800/70 text-center">
+                Will you be my valentine?
+            </h1>
+        </div>
 
-        <div class="flex gap-4 pop-in delay-4">
-            <button onclick="window.location.href='third.html'" class="bg-pink-400 hover:bg-pink-500 text-white px-8 py-3 rounded-full font-semibold shadow-lg transition-all hover:scale-110">
+        <div class="flex gap-4 pop-in delay-3">
+            <button onclick="handleNoClick(this)" class="bg-pink-400 hover:bg-pink-500 text-white px-8 py-3 rounded-full font-semibold shadow-lg transition-all hover:scale-110">
                 Yes
             </button>
             <button onclick="handleNoClick(this)" class="group bg-gray-100 hover:bg-gray-200 text-gray-700 px-8 py-3 rounded-full font-semibold shadow-lg transition-all hover:scale-110 relative">
@@ -97,7 +179,7 @@
             </button>
         </div>
 
-        <img src="mocha1.gif" class="w-24 pop-in delay-2 fixed bottom-8 right-8" alt="Mocha">
+        <img src="mocha1.gif" class="w-24 pop-in delay-4 fixed bottom-8 right-8" alt="Mocha">
     </div>
 </body>
 </html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .fade-in-up {
+            opacity: 0;
+            animation: fadeInUp 1s ease-out forwards;
+        }
+
+        .scroll-trigger {
+            opacity: 0;
+            margin-top: 25vh;
+        }
+
+        .scroll-trigger:first-child {
+            margin-top: 0;
+        }
+
+        .scroll-trigger.visible {
+            animation: fadeInUp 1s ease-out forwards;
+        }
+    </style>
+    <script>
+        function updateCountdown() {
+            const targetDate = new Date('2025-02-14T18:00:00+07:00');
+            const targetDateSecret = new Date('2025-02-14T00:00:00+07:00');
+            const now = new Date();
+
+            function formatTime(timeDiff) {
+                const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+                return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+            }
+
+            const buffetCountdown = document.getElementById('buffetCountdown');
+            const secretCountdown = document.getElementById('secretCountdown');
+            
+            if (buffetCountdown) {
+                const timeDiff = targetDate - now;
+                buffetCountdown.textContent = formatTime(timeDiff);
+            }
+            
+            if (secretCountdown) {
+                const timeDiff = targetDateSecret - now;
+                secretCountdown.textContent = formatTime(timeDiff);
+            }
+        }
+
+        // Scroll animation
+        function handleScroll() {
+            const elements = document.querySelectorAll('.scroll-trigger');
+            elements.forEach(element => {
+                const position = element.getBoundingClientRect();
+                if(position.top < window.innerHeight - 100) {
+                    element.classList.add('visible');
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+            window.addEventListener('scroll', handleScroll);
+            handleScroll(); // Initial check
+        });
+    </script>
+</head>
+<body class="min-h-screen bg-blue-50">
+    <div class="flex flex-col items-center p-8">
+        <div class="scroll-trigger text-center mt-32">
+            <h1 class="text-3xl font-serif text-blue-800/70">
+                thank you for saying yes :>
+            </h1>
+        </div>
+
+        <div class="scroll-trigger text-center">
+            <p class="text-xl text-blue-800/70">as you know</p>
+            <img src="milllkcheer.gif" alt="Milk Cheer" class="w-32 mx-auto mt-4">
+        </div>
+
+        <div class="scroll-trigger text-center">
+            <p class="text-xl text-blue-800/70">
+                we are going to eat buffet in <span id="buffetCountdown" class="font-bold"></span>
+            </p>
+            <img src="mochaeat.gif" alt="Mocha Eating" class="w-32 mx-auto mt-4">
+        </div>
+
+        <div class="scroll-trigger text-center">
+            <p class="text-xl text-blue-800/70">but i have an idea</p>
+        </div>
+
+        <div class="scroll-trigger text-center">
+            <p class="text-xl text-blue-800/70">to make the date more fun</p>
+            <img src="mochafun.gif" alt="Mocha Fun" class="w-32 mx-auto mt-4">
+        </div>
+
+        <div class="scroll-trigger text-center">
+            <p class="text-xl text-blue-800/70 mb-8">Click Below</p>
+        </div>
+
+        <div class="scroll-trigger flex justify-center gap-8 mb-32">
+            <div class="text-center">
+                <img src="dateplan.png" alt="Date Plan" class="w-32 floating cursor-pointer">
+                <p class="mt-4 text-blue-800/70">Date Plan</p>
+            </div>
+            <div class="text-center opacity-50">
+                <img src="secretpage.png" alt="Secret Page" class="w-32 floating">
+                <p class="mt-4 text-blue-800/70">
+                    Locked until<br>
+                    <span id="secretCountdown" class="font-bold"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
